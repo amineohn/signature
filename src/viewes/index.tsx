@@ -70,7 +70,7 @@ const Index = () => {
   };
   return (
     <PageTransition>
-      <div className="flex justify-center items-center my-60">
+      <div className="flex justify-center items-center xl:my-56 md:my-60 sm:my-60 my-20">
         <div className="py-12 px-12 bg-white rounded-2xl shadow-xl z-20 ">
           <div>
             <h1 className="text-2xl font-bold text-center mb-4 cursor-pointer">
