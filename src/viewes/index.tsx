@@ -58,10 +58,8 @@ const Index = () => {
     formData.append("Link", data.Link);
     axios
       .post(`http://${window.location.hostname}:3001/generate`, formData, {
-        method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
-          body: JSON.stringify({ ...data }),
         },
       })
       .then((response) => response)
