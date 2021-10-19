@@ -269,17 +269,8 @@ const Index = () => {
                   type="file"
                   onChange={onSaveFileChange}
                   className="hidden"
+                  {...register("file", { required: true })}
                 />
-                {errors.filename && (
-                  <PageTransition>
-                    <span
-                      role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
-                    >
-                      Champs obligatoires.
-                    </span>
-                  </PageTransition>
-                )}
                 <span className=" text-normal leading-normal text-center inline-flex cursor-pointer ml-4">
                   <svg
                     width="20"
@@ -302,6 +293,18 @@ const Index = () => {
                 </span>
               </label>
             </div>
+            {errors.file && (
+              <div className="flex justify-center">
+                <PageTransition>
+                  <span
+                    role="alert"
+                    className="text-green-500 font-normal text-xs inline-flex mt-2"
+                  >
+                    Champs obligatoires.
+                  </span>
+                </PageTransition>
+              </div>
+            )}
 
             <div className="text-center mt-6">
               <button
