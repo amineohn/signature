@@ -262,7 +262,11 @@ const Index = () => {
               </div>
             </div>
             <div className="flex justify-center space-x-2">
-              <label className="py-3 px-3 w-56 text-sm text-white bg-green-700 hover:bg-green-900 transition rounded-2xl">
+              <label
+                className={`py-3 px-3 w-56 text-sm text-white bg-green-700 hover:bg-green-900 transition rounded-2xl ${
+                  errors.file && `animate-bounce`
+                }`}
+              >
                 <input
                   type="file"
                   onChange={onSaveFileChange}
@@ -308,7 +312,7 @@ const Index = () => {
               <div className="grid text-center">
                 <button
                   aria-label="Submit"
-                  className="py-3 w-28 text-normal text-white bg-green-600 hover:bg-green-700 transition rounded-2xl"
+                  className={`py-3 w-28 text-normal text-white bg-green-600 hover:bg-green-700 transition rounded-2xl`}
                 >
                   Générer
                 </button>
