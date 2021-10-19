@@ -45,7 +45,7 @@ const Index = () => {
   const onSaveFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  const onSubmit = (data) => {
+  const onSubmit = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("LastName", lastName);
