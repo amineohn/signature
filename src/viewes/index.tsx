@@ -3,15 +3,15 @@ import { useState, ChangeEvent } from "react";
 import PageTransition from "../components/PageTransition";
 import axios from "axios";
 const Index = () => {
-  const [firstName, setFristName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [functions, setFunction] = useState("");
-  const [mail, setMail] = useState("");
-  const [proNumber, setProNumber] = useState("");
-  const [number, setNumber] = useState("");
-  const [adress, setAdress] = useState("");
-  const [link, setLink] = useState("");
-  const [file, setFile] = useState();
+  const [, setFristName] = useState("");
+  const [, setLastName] = useState("");
+  const [, setFunction] = useState("");
+  const [, setMail] = useState("");
+  const [, setProNumber] = useState("");
+  const [, setNumber] = useState("");
+  const [, setAdress] = useState("");
+  const [, setLink] = useState("");
+  const [, setFile] = useState();
 
   const {
     register,
@@ -45,25 +45,25 @@ const Index = () => {
   const onSaveFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  const onSubmit = () => {
+  const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("LastName", lastName);
-    formData.append("FirstName", firstName);
-    formData.append("Function", functions);
-    formData.append("Mail", mail);
-    formData.append("ProNumber", proNumber);
-    formData.append("Number", number);
-    formData.append("Adress", adress);
-    formData.append("Link", link);
+    formData.append("file", data.file);
+    formData.append("FirstName", data.FirstName);
+    formData.append("LastName", data.LastName);
+    formData.append("Function", data.Function);
+    formData.append("Mail", data.Mail);
+    formData.append("ProNumber", data.ProNumber);
+    formData.append("Number", data.Number);
+    formData.append("Adress", data.Adress);
+    formData.append("Link", data.Link);
     axios
       .post(`http://${window.location.hostname}:3001/generate`, formData, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json:multipart/form-data",
+          body: JSON.stringify({ ...data }),
         },
-        // body: JSON.stringify({ ...data }),
       })
       .then((response) => response)
       .then((body) => console.log(body));
