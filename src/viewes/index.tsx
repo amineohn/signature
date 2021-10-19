@@ -60,8 +60,7 @@ const Index = () => {
       .post(`http://${window.location.hostname}:3001/generate`, formData, {
         method: "POST",
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json:multipart/form-data",
+          "Content-Type": "multipart/form-data",
           body: JSON.stringify({ ...data }),
         },
       })
