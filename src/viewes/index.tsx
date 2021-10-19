@@ -71,11 +71,9 @@ const Index = () => {
   return (
     <PageTransition>
       <div className="flex justify-center items-center my-60">
-        <div className="absolute w-60 h-60 rounded-xl bg-green-700 -top-5 -left-16 z-0 transform rotate-45 hidden md:block"></div>
-        <div className="absolute w-48 h-48 rounded-xl bg-green-700 -bottom-6 -right-10 transform rotate-12 hidden md:block"></div>
         <div className="py-12 px-12 bg-white rounded-2xl shadow-xl z-20 ">
           <div>
-            <h1 className="text-3xl font-bold text-center mb-4 cursor-pointer">
+            <h1 className="text-2xl font-bold text-center mb-4 cursor-pointer">
               Générer une signature
             </h1>
           </div>
@@ -306,31 +304,31 @@ const Index = () => {
               </div>
             )}
 
-            <div className="text-center mt-6">
-              <button
-                aria-label="Submit"
-                className="py-3 w-64 text-xl text-white bg-green-600 hover:bg-green-700 transition rounded-2xl"
-              >
-                Générer
-              </button>
-            </div>
-            <div className="text-center mt-4">
-              <button
-                aria-label="Submit"
-                className="py-3 w-64 text-xl text-white bg-gray-700 hover:bg-gray-900 transition rounded-2xl"
-              >
-                <a
-                  href={`http://${window.location.hostname}:3001/preview`}
-                  target="_blank"
+            <div className="flex space-x-2 mt-2 justify-center">
+              <div className="grid text-center">
+                <button
+                  aria-label="Submit"
+                  className="py-3 w-28 text-normal text-white bg-green-600 hover:bg-green-700 transition rounded-2xl"
                 >
-                  Aperçu
-                </a>
-              </button>
+                  Générer
+                </button>
+              </div>
+              <div className="grid text-center">
+                <button
+                  aria-label="Submit"
+                  className="py-3 w-28 text-normal text-white bg-gray-700 hover:bg-gray-900 transition rounded-2xl"
+                >
+                  <a
+                    href={`http://${window.location.hostname}:3001/preview`}
+                    target="_blank"
+                  >
+                    Aperçu
+                  </a>
+                </button>
+              </div>
             </div>
           </form>
         </div>
-        <div className="w-40 h-40 absolute bg-green-700 rounded-full top-0 right-12 hidden md:block"></div>
-        <div className="w-20 h-40 absolute bg-green-700 rounded-full bottom-20 left-10 transform rotate-45 hidden md:block"></div>
       </div>
     </PageTransition>
   );
