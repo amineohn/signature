@@ -125,7 +125,7 @@ app.post(`/generate`, upload.single("filename"), (req, res) => {
               </th>
       
               <th>
-                <a mc:disable-tracking href="https://www.linkedin.com/company/les-d%C3%A9tritivores/?originalSubdomain=fr" style="text-decoration: none; margin-left: 4px">
+                <a mc:disable-tracking href="https://www.linkedin.com/company/les-détritivores/?originalSubdomain=fr" style="text-decoration: none; margin-left: 4px">
                   <img style=" vertical-align: bottom; padding-top: 12px;" data-input="linkedin" data-tab="social" src="../img/linkedin.png" />
                 </a>
               </th>
