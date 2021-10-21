@@ -49,8 +49,8 @@ const Index = () => {
   };
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("filename", data.filename);
-    formData.append("file", data.file);
+    formData.append("FileName", data.FileName);
+    formData.append("File", data.File);
     formData.append("FirstName", data.FirstName);
     formData.append("LastName", data.LastName);
     formData.append("Function", data.Function);
@@ -67,6 +67,8 @@ const Index = () => {
       })
       .then((response) => response)
       .then((body) => console.log(body));
+
+    console.log(data);
   };
   return (
     <PageTransition>
@@ -274,7 +276,7 @@ const Index = () => {
                   className="hidden"
                   {...register("file", { required: true })}
                 />
-                <span className=" text-normal leading-normal text-center inline-flex cursor-pointer ml-4">
+                <span className="text-normal leading-normal text-center inline-flex cursor-pointer ml-4">
                   <svg
                     width="20"
                     height="20"

@@ -47,6 +47,14 @@ var storage = multer.diskStorage({
     callBack(null, path.join(__dirname, "/generated/assets/images"));
   },
   filename: (req, file, callBack) => {
+    if (file) {
+      const extFile = file.originalname.replace(".", "");
+      const extPattern = /(jpg|jpeg|png|gif|svg)/gi.test(extFile);
+      if (!extPattern)
+        return done(new TypeError("File format is not valid"), null);
+      req.photo = file.originalname;
+      return done(null, file.originalname);
+    }
     callBack(
       null,
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
@@ -54,10 +62,10 @@ var storage = multer.diskStorage({
   },
 });
 
-var upload = multer({
+var storage = multer({
   storage: storage,
-});
-app.post(`/generate`, upload.single("filename"), (req, res) => {
+}).single("file");
+app.post(`/generate`, storage, (req, res) => {
   if (!req.file) {
     console.log("No file upload");
   } else {
@@ -121,19 +129,19 @@ app.post(`/generate`, upload.single("filename"), (req, res) => {
             <table style="border-spacing: 0px;">
               <th>
                 <a mc:disable-tracking href="https://www.facebook.com/lesdetritivores/" style="text-decoration: none;">
-                  <img style="vertical-align: bottom; padding-top: 10px; margin-left: 0px;" data-input="facebook" data-tab="social" src="./assets/images/facebook.png" />
+                  <img style="vertical-align: bottom; padding-top: 10px; margin-left: 0px;" data-input="facebook" data-tab="social" src=/img/facebook.png" />
                 </a>
               </th>
       
               <th>
                 <a mc:disable-tracking href="https://www.instagram.com/lesdetritivores/?hl=fr" style="text-decoration: none;">
-                  <img style="vertical-align: bottom; padding-top: 12px; margin-left: 4px" data-input="insta" data-tab="social" src="./assets/images/insta.png" />
+                  <img style="vertical-align: bottom; padding-top: 12px; margin-left: 4px" data-input="insta" data-tab="social" src="/img/insta.png" />
                 </a>
               </th>
       
               <th>
                 <a mc:disable-tracking href="https://www.linkedin.com/company/les-d%C3%A9tritivores/?originalSubdomain=fr" style="text-decoration: none; margin-left: 4px">
-                  <img style=" vertical-align: bottom; padding-top: 12px;" data-input="linkedin" data-tab="social" src="./assets/images/linkedin.png" />
+                  <img style=" vertical-align: bottom; padding-top: 12px;" data-input="linkedin" data-tab="social" src=/img/linkedin.png" />
                 </a>
               </th>
           </table>
