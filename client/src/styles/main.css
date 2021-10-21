@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-tl from-green-600 to-green-800 h-screen overflow-hidden;
+  @apply bg-gradient-to-tl from-green-600 to-green-800 h-screen overflow-hidden select-none;
 }

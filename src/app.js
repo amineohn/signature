@@ -67,7 +67,7 @@ var storage = multer.diskStorage({
 
 var storage = multer({
   storage: storage,
-}).single("file");
+}).single("filename");
 
 app.post(`/generate`, storage, (req, res) => {
   if (!req.file) {
@@ -150,11 +150,20 @@ app.post(`/generate`, storage, (req, res) => {
               </th>
           </table>
     </table>`;
+  res.json({
+    FirstName: req.body.FirstName,
+    LastName: req.body.LastName,
+    Function: req.body.Function,
+    Mail: req.body.Mail,
+    ProNumber: req.body.ProNumber,
+    Number: req.body.Number,
+    Link: req.body.Link,
+    fileName: req.file.filename,
+  });
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
+    const file = new AdmZip();
+    file.addLocalFolder("src/generated");
+    file.writeZip("src/extracted/signature.zip");
   });
-
-  const file = new AdmZip();
-  file.addLocalFolder("src/generated");
-  file.writeZip("src/extracted/signature.zip");
 });
