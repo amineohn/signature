@@ -1,26 +1,27 @@
 {
-  "name": "signature",
-  "version": "0.0.0",
+  "name": "signature-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
+    "server": "nodemon src/app.js",
+    "prod": "nodemon src/app.js",
+    "front": "cd client && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run server --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run front\""
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@chakra-ui/react": "^1.6.10",
-    "axios": "^0.23.0",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-hook-form": "^7.17.4"
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.3",
+    "nodemon": "^2.0.13",
+    "path": "^0.12.7"
   },
   "devDependencies": {
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@vitejs/plugin-react": "^1.0.0",
-    "autoprefixer": "^10.3.7",
-    "postcss": "^8.3.9",
-    "tailwindcss": "^2.2.17",
-    "typescript": "^4.3.2",
-    "vite": "^2.6.4"
+    "concurrently": "^6.3.0"
   }
 }

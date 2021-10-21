@@ -12,6 +12,7 @@ const Index = () => {
   const [, setAdress] = useState("");
   const [, setLink] = useState("");
   const [, setFile] = useState();
+  const [, setNameFile] = useState();
 
   const {
     register,
@@ -44,9 +45,11 @@ const Index = () => {
   };
   const onSaveFileChange = (e) => {
     setFile(e.target.files[0]);
+    setNameFile(e.target.value);
   };
   const onSubmit = (data) => {
     const formData = new FormData();
+    formData.append("filename", data.filename);
     formData.append("file", data.file);
     formData.append("FirstName", data.FirstName);
     formData.append("LastName", data.LastName);
@@ -266,6 +269,7 @@ const Index = () => {
               >
                 <input
                   type="file"
+                  accept="image/*"
                   onChange={onSaveFileChange}
                   className="hidden"
                   {...register("file", { required: true })}
