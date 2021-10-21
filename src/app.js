@@ -36,7 +36,7 @@ app.use(
 );
 app.use("/assets", express.static(path.join(__dirname, "/generated/assets")));
 
-app.get("/preview", (req, res) => {
+app.get("/api/preview", (req, res) => {
   res.sendFile(__dirname + "/generated/index.html");
 });
 

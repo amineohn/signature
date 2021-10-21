@@ -324,7 +324,7 @@ const Index = () => {
                   className="py-3 w-28 text-normal text-white bg-gray-700 hover:bg-gray-900 transition rounded-2xl"
                 >
                   <a
-                    href={`http://${window.location.hostname}:3001/preview`}
+                    href={`http://${window.location.hostname}:3001/api/preview`}
                     target="_blank"
                   >
                     Aperçu
