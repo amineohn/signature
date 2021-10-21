@@ -7,9 +7,11 @@
     "server": "nodemon src/app.js",
     "prod": "node src/app.js",
     "front": "cd client && npm run dev",
+    "prods": "cd client && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "npm run server --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run front\""
+    "dev": "concurrently \"npm run server\" \"npm run front\"",
+    "production": "concurrently \"npm run prod\" \"npm run prods\""
   },
   "author": "",
   "license": "ISC",
