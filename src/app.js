@@ -36,6 +36,7 @@ app.use(
   "/img",
   express.static(path.join(__dirname, "/generated/assets/images"))
 );
+app.use("/download", express.static(path.join(__dirname, "/extracted")));
 app.use("/assets", express.static(path.join(__dirname, "/generated/assets")));
 
 app.get("/api/preview", (req, res) => {
@@ -67,6 +68,7 @@ var storage = multer.diskStorage({
 var storage = multer({
   storage: storage,
 }).single("file");
+
 app.post(`/generate`, storage, (req, res) => {
   if (!req.file) {
     console.log("No file upload");
@@ -150,9 +152,9 @@ app.post(`/generate`, storage, (req, res) => {
     </table>`;
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
-
-    const file = new AdmZip();
-    file.addLocalFolder("src/generated");
-    file.writeZip("signature.zip");
   });
+
+  const file = new AdmZip();
+  file.addLocalFolder("src/generated");
+  file.writeZip("src/extracted/signature.zip");
 });
