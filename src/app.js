@@ -44,37 +44,18 @@ app.get("/api/preview", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-
-var storage = multer.diskStorage({
-  destination: (req, file, callBack) => {
-    callBack(null, path.join(__dirname, "/generated/assets/images"));
-  },
-  filename: (req, file, callBack) => {
-    if (file) {
-      const extFile = file.originalname.replace(".", "");
-      const extPattern = /(jpg|jpeg|png|gif|svg)/gi.test(extFile);
-      if (!extPattern)
-        return done(new TypeError("File format is not valid"), null);
-      req.photo = file.originalname;
-      return done(null, file.originalname);
-    }
-    callBack(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
+const upload = multer({
+  dest: path.join(__dirname, "/generated/assets/images"),
 });
 
-var storage = multer({
-  storage: storage,
-}).single("filename");
-
-app.post(`/generate`, storage, (req, res) => {
+app.post(`/generate`, upload.single("filename"), (req, res) => {
+  console.log(req.body);
   if (!req.file) {
     console.log("No file upload");
   } else {
     console.log(req.file.filename);
     console.log("file uploaded");
+    //return req.file?.filename;
   }
   const data = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
     xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -158,8 +139,9 @@ app.post(`/generate`, storage, (req, res) => {
     ProNumber: req.body.ProNumber,
     Number: req.body.Number,
     Link: req.body.Link,
-    fileName: req.file.filename,
+    filename: req.file.filename,
   });
+  //console.log(req.body.FirstName);
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
     const file = new AdmZip();

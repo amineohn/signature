@@ -50,8 +50,8 @@ const Index = () => {
   };
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("FileName", data.FileName);
-    formData.append("File", data.File);
+    formData.append("filename", data.filename);
+    formData.append("file", data.file);
     formData.append("FirstName", data.FirstName);
     formData.append("LastName", data.LastName);
     formData.append("Function", data.Function);
@@ -319,9 +319,7 @@ const Index = () => {
                 <button
                   aria-label="Submit"
                   className={`py-3 text-normal text-white bg-green-600 hover:bg-green-700 transition rounded-2xl ${
-                    isSubmitSuccessful
-                      ? `w-28 transition-all`
-                      : `w-56 transition-all`
+                    isSubmitSuccessful ? `w-28` : `w-56`
                   }`}
                 >
                   Générer
