@@ -5,6 +5,8 @@ const cors = require("cors");
 const path = require("path");
 const port = process.env.PORT || 3001;
 const multer = require("multer");
+const AdmZip = require("adm-zip");
+
 app.use(cors());
 app.use(express());
 app.use(express.json());
@@ -146,11 +148,11 @@ app.post(`/generate`, storage, (req, res) => {
               </th>
           </table>
     </table>`;
-  const file = new AdmZip();
-
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
-    file.addLocalFolder("./generated", "generated");
+
+    const file = new AdmZip();
+    file.addLocalFolder("src/generated");
     file.writeZip("signature.zip");
   });
 });
