@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useState, ChangeEvent } from "react";
 import PageTransition from "../components/PageTransition";
 import axios from "axios";
+import FadeIn from "react-fade-in";
 const Index = () => {
   const [, setFristName] = useState("");
   const [, setLastName] = useState("");
@@ -13,7 +14,7 @@ const Index = () => {
   const [, setLink] = useState("");
   const [, setFile] = useState();
   const [, setNameFile] = useState();
-
+  const [showModal, setShowModal] = useState(false);
   const {
     register,
     handleSubmit,
@@ -323,20 +324,75 @@ const Index = () => {
               <div className="grid text-center">
                 <button
                   aria-label="Submit"
+                  onClick={() => setShowModal(true)}
                   className="py-3 w-28 text-normal text-white bg-gray-700 hover:bg-gray-900 transition rounded-2xl"
                 >
-                  <a
-                    href={`http://${window.location.hostname}:3001/api/preview`}
-                    target="_blank"
-                  >
-                    Aperçu
-                  </a>
+                  Aperçu
                 </button>
               </div>
             </div>
           </form>
         </div>
       </div>
+      <>
+        {showModal ? (
+          <>
+            <FadeIn>
+              <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                    <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                      <h3 className="text-3xl font-semibold">Aperçu</h3>
+                      <button
+                        className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                        onClick={() => setShowModal(false)}
+                      >
+                        <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                          ×
+                        </span>
+                      </button>
+                    </div>
+                    <div className="relative p-6 flex-auto">
+                      <iframe
+                        src={`http://${window.location.hostname}:3001/api/preview`}
+                      ></iframe>
+                    </div>
+                    <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                      <button
+                        className="text-green-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        <span className="inline-flex">
+                          <svg
+                            width="20"
+                            height="20"
+                            aria-hidden="true"
+                            focusable="false"
+                            data-prefix="far"
+                            data-icon="times-circle"
+                            className="svg-inline--fa fa-times-circle fa-w-16"
+                            role="img"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path
+                              fill="currentColor"
+                              d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm101.8-262.2L295.6 256l62.2 62.2c4.7 4.7 4.7 12.3 0 17l-22.6 22.6c-4.7 4.7-12.3 4.7-17 0L256 295.6l-62.2 62.2c-4.7 4.7-12.3 4.7-17 0l-22.6-22.6c-4.7-4.7-4.7-12.3 0-17l62.2-62.2-62.2-62.2c-4.7-4.7-4.7-12.3 0-17l22.6-22.6c4.7-4.7 12.3-4.7 17 0l62.2 62.2 62.2-62.2c4.7-4.7 12.3-4.7 17 0l22.6 22.6c4.7 4.7 4.7 12.3 0 17z"
+                            ></path>
+                          </svg>{" "}
+                          <span className="ml-1">Fermer</span>
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            </FadeIn>
+          </>
+        ) : null}
+      </>
     </PageTransition>
   );
 };

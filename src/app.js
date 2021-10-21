@@ -91,7 +91,7 @@ app.post(`/generate`, storage, (req, res) => {
     
       <tr>
           <td>
-            <a href="https://les-detritivores.org/" style="text-decoration:none"><img moz-do-not-send="false" style="" src="./assets/images/${req.file.filename}" alt="image profil"/>
+            <a href="https://les-detritivores.org/" style="text-decoration:none"><img moz-do-not-send="false" style="" src="../img/${req.file.filename}" alt="image profil"/>
           </td>
     
           <td style="padding-top: 0px; padding-left: 10px;">
@@ -129,24 +129,28 @@ app.post(`/generate`, storage, (req, res) => {
             <table style="border-spacing: 0px;">
               <th>
                 <a mc:disable-tracking href="https://www.facebook.com/lesdetritivores/" style="text-decoration: none;">
-                  <img style="vertical-align: bottom; padding-top: 10px; margin-left: 0px;" data-input="facebook" data-tab="social" src=/img/facebook.png" />
+                  <img style="vertical-align: bottom; padding-top: 10px; margin-left: 0px;" data-input="facebook" data-tab="social" src="../img/facebook.png" />
                 </a>
               </th>
       
               <th>
                 <a mc:disable-tracking href="https://www.instagram.com/lesdetritivores/?hl=fr" style="text-decoration: none;">
-                  <img style="vertical-align: bottom; padding-top: 12px; margin-left: 4px" data-input="insta" data-tab="social" src="/img/insta.png" />
+                  <img style="vertical-align: bottom; padding-top: 12px; margin-left: 4px" data-input="insta" data-tab="social" src="../img/insta.png" />
                 </a>
               </th>
       
               <th>
                 <a mc:disable-tracking href="https://www.linkedin.com/company/les-d%C3%A9tritivores/?originalSubdomain=fr" style="text-decoration: none; margin-left: 4px">
-                  <img style=" vertical-align: bottom; padding-top: 12px;" data-input="linkedin" data-tab="social" src=/img/linkedin.png" />
+                  <img style=" vertical-align: bottom; padding-top: 12px;" data-input="linkedin" data-tab="social" src="../img/linkedin.png" />
                 </a>
               </th>
           </table>
     </table>`;
+  const file = new AdmZip();
+
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
+    file.addLocalFolder("./generated", "generated");
+    file.writeZip("signature.zip");
   });
 });
