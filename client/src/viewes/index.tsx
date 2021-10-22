@@ -12,8 +12,8 @@ const Index = () => {
   const [, setNumber] = useState("");
   const [, setAdress] = useState("");
   const [, setLink] = useState("");
-  const [, setFile] = useState();
   const [, setNameFile] = useState();
+  const [, setFile] = useState();
   const [showModal, setShowModal] = useState(false);
   const {
     register,
@@ -45,13 +45,11 @@ const Index = () => {
     setLink(e.target.value);
   };
   const onSaveFileChange = (e) => {
-    setFile(e.target.files[0]);
     setNameFile(e.target.value);
+    setFile(e.target.file[0]);
   };
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("filename", data.filename);
-    formData.append("file", data.file);
     formData.append("FirstName", data.FirstName);
     formData.append("LastName", data.LastName);
     formData.append("Function", data.Function);
@@ -60,6 +58,8 @@ const Index = () => {
     formData.append("Number", data.Number);
     formData.append("Adress", data.Adress);
     formData.append("Link", data.Link);
+    formData.append("filename", data.file[0].name);
+    formData.append("file", data.file);
     axios
       .post(`http://${window.location.hostname}:3001/generate`, formData, {
         headers: {
@@ -80,7 +80,11 @@ const Index = () => {
               Générer une signature <span>&#128079;</span>
             </h1>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            encType="multipart/form-data"
+            method="POST"
+          >
             {isSubmitSuccessful && (
               <PageTransition>
                 <div className="shadow-md p-2 flex flex-row rounded-lg">
@@ -101,7 +105,7 @@ const Index = () => {
                 <input
                   type="text"
                   placeholder="Nom"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.FirstName && `border-green-500`
                   }`}
                   {...register("FirstName", { required: true })}
@@ -124,7 +128,7 @@ const Index = () => {
                   onChange={onLastNameChange}
                   type="text"
                   placeholder="Prénom"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.LastName && `border-green-500`
                   }`}
                 />
@@ -145,7 +149,7 @@ const Index = () => {
                   onChange={onFunctionChange}
                   type="text"
                   placeholder="Fonction"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Function && `border-green-500`
                   }`}
                 />
@@ -166,7 +170,7 @@ const Index = () => {
                   onChange={onMailChange}
                   type="text"
                   placeholder="Email"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Mail && `border-green-500`
                   }`}
                 />
@@ -187,7 +191,7 @@ const Index = () => {
                   onChange={onProNumberChange}
                   type="text"
                   placeholder="Numéro Professionel"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.ProNumber && `border-green-500`
                   }`}
                 />
@@ -208,7 +212,7 @@ const Index = () => {
                   onChange={onNumberChange}
                   type="text"
                   placeholder="Numéro Personnel (si requis)"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Number && `border-green-500`
                   }`}
                 />
@@ -229,7 +233,7 @@ const Index = () => {
                   onChange={onAdressChange}
                   type="text"
                   placeholder="Adresse de l'entreprise"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Adress && `border-green-500`
                   }`}
                 />
@@ -250,7 +254,7 @@ const Index = () => {
                   onChange={onLinkChange}
                   type="text"
                   placeholder="Lien du site"
-                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border focus:border-green-500 transition ${
+                  className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Link && `border-green-500`
                   }`}
                 />
@@ -274,6 +278,8 @@ const Index = () => {
               >
                 <input
                   type="file"
+                  id="file"
+                  name="file"
                   accept="image/*"
                   onChange={onSaveFileChange}
                   className="hidden"

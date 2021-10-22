@@ -4,15 +4,19 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const port = process.env.PORT || 3001;
-const multer = require("multer");
 const AdmZip = require("adm-zip");
-
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const fileupload = require("express-fileupload");
+app.use(fileupload());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use(cors());
 app.use(express());
 app.use(express.json());
-
-var bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   const origin = req.get("origin");
@@ -44,19 +48,10 @@ app.get("/api/preview", (req, res) => {
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
-const upload = multer({
-  dest: path.join(__dirname, "/generated/assets/images"),
-});
 
-app.post(`/generate`, upload.single("filename"), (req, res) => {
+app.post(`/generate`, upload.single("file"), (req, res) => {
   console.log(req.body);
-  if (!req.file) {
-    console.log("No file upload");
-  } else {
-    console.log(req.file.filename);
-    console.log("file uploaded");
-    //return req.file?.filename;
-  }
+  res.send("Successfully uploaded!");
   const data = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
     xmlns:w="urn:schemas-microsoft-com:office:word"
     xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
@@ -139,9 +134,8 @@ app.post(`/generate`, upload.single("filename"), (req, res) => {
     ProNumber: req.body.ProNumber,
     Number: req.body.Number,
     Link: req.body.Link,
-    filename: req.file.filename,
+    file: req.file,
   });
-  //console.log(req.body.FirstName);
   fs.writeFile("src/generated/index.html", data, (err) => {
     if (err) throw err;
     const file = new AdmZip();
