@@ -50,7 +50,7 @@ app.get("/api/preview", (req, res) => {
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post(`/generate`, upload.single("file"), (req, res) => {
-  console.log(req.body);
+  console.log(req.file);
   res.send("Successfully uploaded!");
   const data = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
     xmlns:w="urn:schemas-microsoft-com:office:word"
