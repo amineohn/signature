@@ -52,7 +52,8 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.post(`/generate`, upload.single("file"), (req, res) => {
   console.log(req.file);
   res.send("Successfully uploaded!");
-  const data = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+  const html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office"
     xmlns:w="urn:schemas-microsoft-com:office:word"
     xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
     xmlns="http://www.w3.org/TR/REC-html40">
@@ -68,7 +69,6 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
     <link rel=colorSchemeMapping href="/assets/colorschememapping.xml">
     <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
     <table style="border-spacing: 0px;">  
-    
       <tr>
           <td>
             <a href="https://les-detritivores.org/" style="text-decoration:none"><img moz-do-not-send="false" style="" src="../img/${req.file.filename}" alt="image profil"/>
@@ -125,7 +125,8 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
                 </a>
               </th>
           </table>
-    </table>`;
+    </table>
+  `;
   res.json({
     FirstName: req.body.FirstName,
     LastName: req.body.LastName,
@@ -136,7 +137,7 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
     Link: req.body.Link,
     file: req.file,
   });
-  fs.writeFile("src/generated/index.html", data, (err) => {
+  fs.writeFile("src/generated/index.html", html, (err) => {
     if (err) throw err;
     const file = new AdmZip();
     file.addLocalFolder("src/generated");
