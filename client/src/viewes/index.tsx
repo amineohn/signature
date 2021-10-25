@@ -19,8 +19,7 @@ const Index = () => {
   const [, setNumber] = useState("");
   const [, setAdress] = useState("");
   const [, setLink] = useState("");
-  const [, setNameFile] = useState();
-  const [, setFile] = useState();
+  const [file, setFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const onFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -47,14 +46,9 @@ const Index = () => {
   const onLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLink(e.target.value);
   };
-  const onSaveFileChange = (e) => {
-    switch (e.target.name) {
-      case "file":
-        setFile(e.target.file[0]);
-        break;
-      default:
-        setNameFile(e.target.value);
-    }
+  const onSaveFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files[0];
+    setFile(file);
   };
   const onSubmit = async (data: any) => {
     const url = `http://${window.location.hostname}:3001/generate`;
@@ -68,7 +62,7 @@ const Index = () => {
     params.append("number", data.number);
     params.append("adress", data.adress);
     params.append("link", data.link);
-    params.append("file", data.file[0]);
+    params.append("file", file);
 
     const options = {
       headers: {
@@ -80,6 +74,7 @@ const Index = () => {
       .post(url, params, options)
       .then((response) => response)
       .catch((error) => console.log(error));
+    console.log(data);
   };
   return (
     <PageTransition>
@@ -123,7 +118,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -146,7 +141,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -169,7 +164,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -192,7 +187,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -215,7 +210,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -238,7 +233,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -261,7 +256,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -284,7 +279,7 @@ const Index = () => {
                   <PageTransition>
                     <span
                       role="alert"
-                      className="text-green-500 font-normal text-xs inline-flex mt-2"
+                      className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                     >
                       Champs obligatoires.
                     </span>
@@ -301,7 +296,6 @@ const Index = () => {
                 <input
                   type="file"
                   id="file"
-                  name="file"
                   accept="image/*"
                   className="hidden"
                   onChange={onSaveFileChange}
@@ -334,7 +328,7 @@ const Index = () => {
                 <PageTransition>
                   <span
                     role="alert"
-                    className="text-green-500 font-normal text-xs inline-flex mt-2"
+                    className="text-green-500 font-normal text-xs inline-flex mt-2 animate-bounce"
                   >
                     Champs obligatoires.
                   </span>
