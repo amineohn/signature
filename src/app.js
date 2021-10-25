@@ -1,45 +1,44 @@
-const fs = require("fs");
-const express = require("express");
+const fs = require(`fs`);
+const express = require(`express`);
 const app = express();
-const cors = require("cors");
-const path = require("path");
+const cors = require(`cors`);
+const path = require(`path`);
 const port = process.env.PORT || 3001;
-const AdmZip = require("adm-zip");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
-const cookieParser = require("cookie-parser");
-const fileupload = require("express-fileupload");
+const AdmZip = require(`adm-zip`);
+const multer = require(`multer`);
+const upload = multer({ dest: `uploads/` });
+const cookieParser = require(`cookie-parser`);
+const fileupload = require(`express-fileupload`);
 
 app.use(fileupload());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use(express());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
+  res.header(`Access-Control-Allow-Credentials`, true);
   res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    `Access-Control-Allow-Methods`,
+    `GET, POST, OPTIONS, PUT, PATCH, DELETE`
   );
   res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma"
+    `Access-Control-Allow-Headers`,
+    `Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma`
   );
-  if (req.method === "OPTIONS") {
+  if (req.method === `OPTIONS`) {
     res.sendStatus(204);
   } else {
     next();
   }
 });
 app.use(
-  "/img",
-  express.static(path.join(__dirname, "/generated/assets/images"))
+  `/img`,
+  express.static(path.join(__dirname, `/generated/assets/images`))
 );
-app.use("/download", express.static(path.join(__dirname, "/extracted")));
-app.use("/assets", express.static(path.join(__dirname, "/generated/assets")));
+app.use(`download`, express.static(path.join(__dirname, `extracted`)));
+app.use(`assets`, express.static(path.join(__dirname, `generated/assets`)));
 
 app.get(`/api/preview`, (req, res) => {
   res.sendFile(`${__dirname}/generated/index.html`);
@@ -47,7 +46,7 @@ app.get(`/api/preview`, (req, res) => {
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
-app.post(`/generate`, upload.single("file"), (req, res) => {
+app.post(`/generate`, upload.single(`file`), (req, res) => {
   console.log(`
       firstName:\n ${req.body.firstName}\n
       lastName:\n ${req.body.lastName}\n
@@ -56,9 +55,8 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
       proNumber:\n ${req.body.proNumber}\n
       number:\n ${req.body.number}\n
       link:\n ${req.body.link}\n
-      fileName:\n ${req.file?.filename}\n
+      fileName:\n ${req.file?.filename}
   `);
-  res.send("Successfully uploaded!");
   const html = `
     <html xmlns:o="urn:schemas-microsoft-com:office:office"
     xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -134,20 +132,10 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
           </table>
     </table>
   `;
-  res.json({
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    function: req.body.function,
-    mail: req.body.mail,
-    proNumber: req.body.proNumber,
-    number: req.body.number,
-    link: req.body.link,
-    filename: req.file.filename,
-  });
-  fs.writeFile("src/generated/index.html", html, (err) => {
+  fs.writeFile(`src/generated/index.html`, html, (err) => {
     if (err) throw err;
     const file = new AdmZip();
-    file.addLocalFolder("src/generated");
-    file.writeZip("src/extracted/signature.zip");
+    file.addLocalFolder(`src/generated`);
+    file.writeZip(`src/extracted/signature.zip`);
   });
 });

@@ -2,8 +2,15 @@ import { useForm } from "react-hook-form";
 import { useState, ChangeEvent } from "react";
 import PageTransition from "../components/PageTransition";
 import axios from "axios";
+//import FormData from "form-data";
 import FadeIn from "react-fade-in";
 const Index = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm();
+
   const [, setFristName] = useState("");
   const [, setLastName] = useState("");
   const [, setFunction] = useState("");
@@ -16,11 +23,6 @@ const Index = () => {
   const [, setFile] = useState();
   const [showModal, setShowModal] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm();
   const onFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFristName(e.target.value);
   };
@@ -46,35 +48,38 @@ const Index = () => {
     setLink(e.target.value);
   };
   const onSaveFileChange = (e) => {
-    setNameFile(e.target.value);
-    setFile(e.target.file[0]);
+    switch (e.target.name) {
+      case "file":
+        setFile(e.target.file[0]);
+        break;
+      default:
+        setNameFile(e.target.value);
+    }
   };
-  const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append("FirstName", data.firstName);
-    formData.append("LastName", data.lastName);
-    formData.append("Function", data.function);
-    formData.append("Mail", data.mail);
-    formData.append("ProNumber", data.proNumber);
-    formData.append("Number", data.number);
-    formData.append("Adress", data.adress);
-    formData.append("Link", data.link);
-    formData.append("filename", data.file[0].name);
-    formData.append("file", data.file);
-    axios
-      .post(`http://${window.location.hostname}:3001/generate`, formData, {
-        method: "POST",
-        headers: {
-          //"Content-Type": "multipart/form-data",
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          body: JSON.stringify({ ...data }),
-        },
-      })
-      .then((response) => response)
-      .then((body) => console.log(body));
+  const onSubmit = async (data: any) => {
+    const url = `http://${window.location.hostname}:3001/generate`;
 
-    console.log(data);
+    const params = new URLSearchParams();
+    params.append("firstName", data.firstName);
+    params.append("lastName", data.lastName);
+    params.append("function", data.function);
+    params.append("mail", data.mail);
+    params.append("proNumber", data.proNumber);
+    params.append("number", data.number);
+    params.append("adress", data.adress);
+    params.append("link", data.link);
+    params.append("file", data.file[0]);
+
+    const options = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+
+    await axios
+      .post(url, params, options)
+      .then((response) => response)
+      .catch((error) => console.log(error));
   };
   return (
     <PageTransition>
@@ -85,11 +90,7 @@ const Index = () => {
               Générer une signature <span>&#128079;</span>
             </h1>
           </div>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            encType="multipart/form-data"
-            method="POST"
-          >
+          <form encType="multipart/form-data" onSubmit={handleSubmit(onSubmit)}>
             {isSubmitSuccessful && (
               <PageTransition>
                 <div className="shadow-md p-2 flex flex-row rounded-lg">
@@ -113,7 +114,7 @@ const Index = () => {
                   id="firstName"
                   name="firstName"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.FirstName && `border-green-500`
+                    errors.firstName && `border-green-500`
                   }`}
                   {...register("firstName", { required: true })}
                   onChange={onFirstNameChange}
@@ -131,14 +132,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("lastName", { required: true })}
-                  onChange={onLastNameChange}
                   type="text"
                   placeholder="Prénom"
                   id="lastName"
                   name="lastName"
+                  onChange={onLastNameChange}
+                  {...register("lastName", { required: true })}
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.LastName && `border-green-500`
+                    errors.lastName && `border-green-500`
                   }`}
                 />
                 {errors.lastName && (
@@ -154,14 +155,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("function", { required: true })}
                   onChange={onFunctionChange}
+                  {...register("function", { required: true })}
                   type="text"
                   placeholder="Fonction"
                   id="function"
                   name="function"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.Function && `border-green-500`
+                    errors.function && `border-green-500`
                   }`}
                 />
                 {errors.function && (
@@ -177,14 +178,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("mail", { required: true })}
                   onChange={onMailChange}
-                  type="text"
+                  {...register("mail", { required: true })}
+                  type="email"
                   placeholder="Email"
                   id="mail"
                   name="mail"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.Mail && `border-green-500`
+                    errors.mail && `border-green-500`
                   }`}
                 />
                 {errors.mail && (
@@ -200,14 +201,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("proNumber", { required: true })}
                   onChange={onProNumberChange}
+                  {...register("proNumber", { required: true })}
                   type="text"
                   id="proNumber"
                   name="proNumber"
                   placeholder="Numéro Professionel"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.ProNumber && `border-green-500`
+                    errors.proNumber && `border-green-500`
                   }`}
                 />
                 {errors.proNumber && (
@@ -223,14 +224,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("number", { required: true })}
                   onChange={onNumberChange}
+                  {...register("number", { required: true })}
                   type="text"
                   id="number"
                   name="number"
-                  placeholder="Numéro Personnel (si requis)"
+                  placeholder="Numéro Personnel (?)"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.Number && `border-green-500`
+                    errors.number && `border-green-500`
                   }`}
                 />
                 {errors.number && (
@@ -246,14 +247,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("adress", { required: true })}
                   onChange={onAdressChange}
+                  {...register("adress", { required: true })}
                   type="text"
                   id="adress"
                   name="adress"
                   placeholder="Adresse de l'entreprise"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.Adress && `border-green-500`
+                    errors.adress && `border-green-500`
                   }`}
                 />
                 {errors.adress && (
@@ -269,14 +270,14 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("link", { required: true })}
                   onChange={onLinkChange}
+                  {...register("link", { required: true })}
                   type="text"
                   id="link"
                   name="link"
                   placeholder="Lien du site"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
-                    errors.Link && `border-green-500`
+                    errors.link && `border-green-500`
                   }`}
                 />
                 {errors.link && (
@@ -302,8 +303,8 @@ const Index = () => {
                   id="file"
                   name="file"
                   accept="image/*"
-                  onChange={onSaveFileChange}
                   className="hidden"
+                  onChange={onSaveFileChange}
                   {...register("file", { required: true })}
                 />
                 <span className="text-normal leading-normal text-center inline-flex cursor-pointer ml-4">
@@ -372,78 +373,76 @@ const Index = () => {
       <>
         {showModal ? (
           <>
-            <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-              <FadeIn>
-                <div className="relative w-auto my-6 mx-auto max-w-3xl focus:transition hover:transition">
-                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none focus:transition hover:transition">
-                    <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t focus:transition hover:transition">
-                      <h3 className="text-3xl font-semibold">Aperçu</h3>
-                      <button
-                        className="z-30 p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                        onClick={() => setShowModal(false)}
+            <FadeIn className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+              <div className="relative w-auto my-6 mx-auto max-w-3xl focus:transition hover:transition">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none focus:transition hover:transition">
+                  <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t focus:transition hover:transition">
+                    <h3 className="text-3xl font-semibold">Aperçu</h3>
+                    <button
+                      className="z-30 p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <svg
+                        width="30"
+                        height="30"
+                        aria-hidden="true"
+                        focusable="false"
+                        data-prefix="fas"
+                        data-icon="times-circle"
+                        className="text-red-600 text-current p-1 rounded-full ease-linear transition-all duration-150 hover:bg-opacity-50 hover:bg-red-300"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
                       >
+                        <path
+                          fill="currentColor"
+                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                        ></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="relative p-6 flex-auto overflow-hidden">
+                    <iframe
+                      src={`http://${window.location.hostname}:3001/api/preview`}
+                      className="w-80 h-48"
+                    ></iframe>
+                  </div>
+                  <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                    <button
+                      className="text-gray-900 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 hover:bg-opacity-50 hover:bg-gray-200 rounded-2xl"
+                      type="button"
+                    >
+                      <span className="inline-flex">
                         <svg
-                          width="30"
-                          height="30"
+                          width="20"
+                          height="20"
                           aria-hidden="true"
                           focusable="false"
                           data-prefix="fas"
-                          data-icon="times-circle"
-                          className="text-red-600 text-current p-1 rounded-full ease-linear transition-all duration-150 hover:bg-opacity-50 hover:bg-red-300"
+                          data-icon="cloud-download-alt"
                           role="img"
                           xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 512 512"
+                          viewBox="0 0 640 512"
                         >
                           <path
                             fill="currentColor"
-                            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"
+                            d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"
                           ></path>
                         </svg>
-                      </button>
-                    </div>
-                    <div className="relative p-6 flex-auto overflow-hidden">
-                      <iframe
-                        src={`http://${window.location.hostname}:3001/api/preview`}
-                        className="w-80 h-48"
-                      ></iframe>
-                    </div>
-                    <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                      <button
-                        className="text-gray-900 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 hover:bg-opacity-50 hover:bg-gray-200 rounded-2xl"
-                        type="button"
-                      >
-                        <span className="inline-flex">
-                          <svg
-                            width="20"
-                            height="20"
-                            aria-hidden="true"
-                            focusable="false"
-                            data-prefix="fas"
-                            data-icon="cloud-download-alt"
-                            role="img"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 640 512"
+                        <span className="ml-1">
+                          <a
+                            href={`http://${window.location.hostname}:3001/download/signature.zip`}
+                            download
                           >
-                            <path
-                              fill="currentColor"
-                              d="M537.6 226.6c4.1-10.7 6.4-22.4 6.4-34.6 0-53-43-96-96-96-19.7 0-38.1 6-53.3 16.2C367 64.2 315.3 32 256 32c-88.4 0-160 71.6-160 160 0 2.7.1 5.4.2 8.1C40.2 219.8 0 273.2 0 336c0 79.5 64.5 144 144 144h368c70.7 0 128-57.3 128-128 0-61.9-44-113.6-102.4-125.4zm-132.9 88.7L299.3 420.7c-6.2 6.2-16.4 6.2-22.6 0L171.3 315.3c-10.1-10.1-2.9-27.3 11.3-27.3H248V176c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16v112h65.4c14.2 0 21.4 17.2 11.3 27.3z"
-                            ></path>
-                          </svg>
-                          <span className="ml-1">
-                            <a
-                              href={`http://${window.location.hostname}:3001/download/signature.zip`}
-                              download
-                            >
-                              Télécharger
-                            </a>
-                          </span>
+                            Télécharger
+                          </a>
                         </span>
-                      </button>
-                    </div>
+                      </span>
+                    </button>
                   </div>
                 </div>
-              </FadeIn>
-            </div>
+              </div>
+            </FadeIn>
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
         ) : null}
@@ -453,3 +452,5 @@ const Index = () => {
 };
 
 export default Index;
+
+typeof self == "object" ? self.FormData : window.FormData;
