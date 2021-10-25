@@ -15,6 +15,7 @@ const Index = () => {
   const [, setNameFile] = useState();
   const [, setFile] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [showMessage, setMessage] = useState(false);
   const {
     register,
     handleSubmit,
