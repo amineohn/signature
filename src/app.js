@@ -8,19 +8,17 @@ const AdmZip = require("adm-zip");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const fileupload = require("express-fileupload");
+
 app.use(fileupload());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use(express());
 app.use(express.json());
 
 app.use((req, res, next) => {
-  const origin = req.get("origin");
-  res.header("Access-Control-Allow-Origin", origin);
   res.header("Access-Control-Allow-Credentials", true);
   res.header(
     "Access-Control-Allow-Methods",
@@ -43,14 +41,23 @@ app.use(
 app.use("/download", express.static(path.join(__dirname, "/extracted")));
 app.use("/assets", express.static(path.join(__dirname, "/generated/assets")));
 
-app.get("/api/preview", (req, res) => {
-  res.sendFile(__dirname + "/generated/index.html");
+app.get(`/api/preview`, (req, res) => {
+  res.sendFile(`${__dirname}/generated/index.html`);
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 app.post(`/generate`, upload.single("file"), (req, res) => {
-  console.log(req.file);
+  console.log(`
+      firstName:\n ${req.body.firstName}\n
+      lastName:\n ${req.body.lastName}\n
+      function:\n ${req.body.function}\n
+      mail:\n ${req.body.mail}\n
+      proNumber:\n ${req.body.proNumber}\n
+      number:\n ${req.body.number}\n
+      link:\n ${req.body.link}\n
+      fileName:\n ${req.file?.filename}\n
+  `);
   res.send("Successfully uploaded!");
   const html = `
     <html xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -71,16 +78,16 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
     <table style="border-spacing: 0px;">  
       <tr>
           <td>
-            <a href="https://les-detritivores.org/" style="text-decoration:none"><img moz-do-not-send="false" style="" src="../img/${req.file.filename}" alt="image profil"/>
+            <a href="https://les-detritivores.org/" style="text-decoration:none"><img moz-do-not-send="false" style="" src="../img/${req.file?.filename}" alt="image profil"/>
           </td>
     
           <td style="padding-top: 0px; padding-left: 10px;">
 
-            <span style="font-family: Arial, Helvetica, Sans-Serif; font-size: 15pt;  color: #e94e1b;"><strong>${req.body.FirstName} ${req.body.LastName}</strong>
+            <span style="font-family: Arial, Helvetica, Sans-Serif; font-size: 15pt;  color: #e94e1b;"><strong>${req.body.firstName} ${req.body.lastName}</strong>
               <br />
       
               <span style="font-size: 11pt; font-family: Arial, Helvetica, Sans-Serif; color: #263b29;">
-                <strong>${req.body.Function}</strong>
+                <strong>${req.body.function}</strong>
               </span>
             </span>
 
@@ -88,22 +95,22 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
             <br />
 
             <span style="color: #263b29 ;font-size: 9pt;font-family: Arial, Helvetica, Sans-Serif; white-space: nowrap; font-weight: 700">
-              ${req.body.Mail}
+              ${req.body.mail}
             </span>
             <br />
             <span style="color: #263b29 ;font-size: 9pt;font-family: Arial, Helvetica, Sans-Serif; white-space: nowrap; font-weight: 500">
-              ${req.body.ProNumber}
+              ${req.body.proNumber}
             </span>
             <br />
             <span style="color: #263b29 ;font-size: 9pt;font-family: Arial, Helvetica, Sans-Serif; white-space: nowrap; font-weight: 500">
-              ${req.body.Number}
+              ${req.body.number}
             </span>
       
             <br />
-            <span style="font-family: Arial, Helvetica, Sans-Serif; font-size: 9pt;  color: #263b29; font-weight: 500">${req.body.Adress}</span>
+            <span style="font-family: Arial, Helvetica, Sans-Serif; font-size: 9pt;  color: #263b29; font-weight: 500">${req.body.adress}</span>
             <br />
-            <a href="https://${req.body.Link}/">
-              <span style="font-family:  Arial, Helvetica, Sans-Serif; font-size: 8.5pt; color: #e94e1b; font-weight: 900">${req.body.Link}</span>
+            <a href="https://${req.body.link}/">
+              <span style="font-family:  Arial, Helvetica, Sans-Serif; font-size: 8.5pt; color: #e94e1b; font-weight: 900">${req.body.link}</span>
             </a>
 
             <table style="border-spacing: 0px;">
@@ -128,14 +135,14 @@ app.post(`/generate`, upload.single("file"), (req, res) => {
     </table>
   `;
   res.json({
-    FirstName: req.body.FirstName,
-    LastName: req.body.LastName,
-    Function: req.body.Function,
-    Mail: req.body.Mail,
-    ProNumber: req.body.ProNumber,
-    Number: req.body.Number,
-    Link: req.body.Link,
-    file: req.file,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    function: req.body.function,
+    mail: req.body.mail,
+    proNumber: req.body.proNumber,
+    number: req.body.number,
+    link: req.body.link,
+    filename: req.file.filename,
   });
   fs.writeFile("src/generated/index.html", html, (err) => {
     if (err) throw err;

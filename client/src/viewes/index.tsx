@@ -51,20 +51,24 @@ const Index = () => {
   };
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("FirstName", data.FirstName);
-    formData.append("LastName", data.LastName);
-    formData.append("Function", data.Function);
-    formData.append("Mail", data.Mail);
-    formData.append("ProNumber", data.ProNumber);
-    formData.append("Number", data.Number);
-    formData.append("Adress", data.Adress);
-    formData.append("Link", data.Link);
+    formData.append("FirstName", data.firstName);
+    formData.append("LastName", data.lastName);
+    formData.append("Function", data.function);
+    formData.append("Mail", data.mail);
+    formData.append("ProNumber", data.proNumber);
+    formData.append("Number", data.number);
+    formData.append("Adress", data.adress);
+    formData.append("Link", data.link);
     formData.append("filename", data.file[0].name);
     formData.append("file", data.file);
     axios
       .post(`http://${window.location.hostname}:3001/generate`, formData, {
+        method: "POST",
         headers: {
-          "Content-Type": "multipart/form-data",
+          //"Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          body: JSON.stringify({ ...data }),
         },
       })
       .then((response) => response)
@@ -106,13 +110,15 @@ const Index = () => {
                 <input
                   type="text"
                   placeholder="Nom"
+                  id="firstName"
+                  name="firstName"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.FirstName && `border-green-500`
                   }`}
-                  {...register("FirstName", { required: true })}
+                  {...register("firstName", { required: true })}
                   onChange={onFirstNameChange}
                 />
-                {errors.FirstName && (
+                {errors.firstName && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -125,15 +131,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("LastName", { required: true })}
+                  {...register("lastName", { required: true })}
                   onChange={onLastNameChange}
                   type="text"
                   placeholder="Prénom"
+                  id="lastName"
+                  name="lastName"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.LastName && `border-green-500`
                   }`}
                 />
-                {errors.LastName && (
+                {errors.lastName && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -146,15 +154,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("Function", { required: true })}
+                  {...register("function", { required: true })}
                   onChange={onFunctionChange}
                   type="text"
                   placeholder="Fonction"
+                  id="function"
+                  name="function"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Function && `border-green-500`
                   }`}
                 />
-                {errors.Function && (
+                {errors.function && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -167,15 +177,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("Mail", { required: true })}
+                  {...register("mail", { required: true })}
                   onChange={onMailChange}
                   type="text"
                   placeholder="Email"
+                  id="mail"
+                  name="mail"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Mail && `border-green-500`
                   }`}
                 />
-                {errors.Mail && (
+                {errors.mail && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -188,15 +200,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("ProNumber", { required: true })}
+                  {...register("proNumber", { required: true })}
                   onChange={onProNumberChange}
                   type="text"
+                  id="proNumber"
+                  name="proNumber"
                   placeholder="Numéro Professionel"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.ProNumber && `border-green-500`
                   }`}
                 />
-                {errors.ProNumber && (
+                {errors.proNumber && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -209,15 +223,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("Number", { required: true })}
+                  {...register("number", { required: true })}
                   onChange={onNumberChange}
                   type="text"
+                  id="number"
+                  name="number"
                   placeholder="Numéro Personnel (si requis)"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Number && `border-green-500`
                   }`}
                 />
-                {errors.Number && (
+                {errors.number && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -230,15 +246,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("Adress", { required: true })}
+                  {...register("adress", { required: true })}
                   onChange={onAdressChange}
                   type="text"
+                  id="adress"
+                  name="adress"
                   placeholder="Adresse de l'entreprise"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Adress && `border-green-500`
                   }`}
                 />
-                {errors.Adress && (
+                {errors.adress && (
                   <PageTransition>
                     <span
                       role="alert"
@@ -251,15 +269,17 @@ const Index = () => {
               </div>
               <div className="grid grid-cols-1">
                 <input
-                  {...register("Link", { required: true })}
+                  {...register("link", { required: true })}
                   onChange={onLinkChange}
                   type="text"
+                  id="link"
+                  name="link"
                   placeholder="Lien du site"
                   className={`block text-sm py-3 px-4 rounded-lg w-full border outline-none focus:border-transparent focus:ring focus:ring-green-500 focus:ring-opacity-50 transition ${
                     errors.Link && `border-green-500`
                   }`}
                 />
-                {errors.Link && (
+                {errors.link && (
                   <PageTransition>
                     <span
                       role="alert"
