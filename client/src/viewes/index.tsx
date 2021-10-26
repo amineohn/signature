@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { useState, ChangeEvent } from "react";
 import PageTransition from "../components/PageTransition";
 import axios from "axios";
-//import FormData from "form-data";
 import FadeIn from "react-fade-in";
 const Index = () => {
   const {
