@@ -22,32 +22,32 @@ const Index = () => {
   const [file, setFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const onFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFristName(e.target.value);
+  const onFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFristName(event.target.value);
   };
-  const onLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
+  const onLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLastName(event.target.value);
   };
-  const onFunctionChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFunction(e.target.value);
+  const onFunctionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFunction(event.target.value);
   };
-  const onMailChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMail(e.target.value);
+  const onMailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setMail(event.target.value);
   };
-  const onProNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setProNumber(e.target.value);
+  const onProNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setProNumber(event.target.value);
   };
-  const onNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNumber(e.target.value);
+  const onNumberChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setNumber(event.target.value);
   };
-  const onAdressChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setAdress(e.target.value);
+  const onAdressChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setAdress(event.target.value);
   };
-  const onLinkChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setLink(e.target.value);
+  const onLinkChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLink(event.target.value);
   };
-  const onSaveFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
+  const onSaveFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files[0];
     setFile(file);
   };
   const onSubmit = async (data: any) => {
@@ -425,7 +425,7 @@ const Index = () => {
                         </svg>
                         <span className="ml-1">
                           <a
-                            href={`http://${window.location.hostname}:3001/download/signature.zip`}
+                            href={`http://${window.location.hostname}:3001/download/signaturevent.zip`}
                             download
                           >
                             Télécharger
